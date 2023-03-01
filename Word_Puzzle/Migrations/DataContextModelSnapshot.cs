@@ -24,52 +24,55 @@ namespace WordPuzzle.Migrations
 
             modelBuilder.Entity("Word_Puzzle.Model.Definition", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Def")
+                    b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("Def");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("WordID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("WordId")
+                        .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("WordID");
+                    b.HasIndex("WordId");
 
                     b.ToTable("Definitions");
                 });
 
             modelBuilder.Entity("Word_Puzzle.Model.Word", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.ToTable("Word");
+                    b.ToTable("Words");
                 });
 
             modelBuilder.Entity("Word_Puzzle.Model.Definition", b =>
                 {
                     b.HasOne("Word_Puzzle.Model.Word", "Word")
-                        .WithMany()
-                        .HasForeignKey("WordID")
+                        .WithMany("Definitions")
+                        .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Word");
+                });
+
+            modelBuilder.Entity("Word_Puzzle.Model.Word", b =>
+                {
+                    b.Navigation("Definitions");
                 });
 #pragma warning restore 612, 618
         }
