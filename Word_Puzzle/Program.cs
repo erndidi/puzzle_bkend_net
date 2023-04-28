@@ -1,7 +1,7 @@
 using Word_Puzzle.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var AllowOrigin = "AllowOrigin";
 
 // Add services to the container.
 //Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/word_puzzlelogs.txt", rollingInterval:RollingInterval.Day).CreateLogger();
@@ -19,16 +19,10 @@ builder.Services.AddMvc().AddJsonOptions(options =>
     options.JsonSerializerOptions.MaxDepth = 64;
     options.JsonSerializerOptions.IncludeFields = true;
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(MyAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("http://localhost:3000/")
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                          });
-});
+builder.Services.AddCors(options =>options.AddPolicy(AllowOrigin, options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
+                        
+
 var app = builder.Build();
 app.UseCors();
 
