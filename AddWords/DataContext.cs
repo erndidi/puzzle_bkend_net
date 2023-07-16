@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
-using Word_Puzzle.Model;
+using Puzzle_API.Model;
 
 
-namespace Word_Puzzle.Data
+namespace Puzzle_API.Data
 {
     public class DataContext : DbContext
     {

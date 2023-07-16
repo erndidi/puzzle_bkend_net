@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Puzzle_API.Data;
 
@@ -11,9 +12,11 @@ using Puzzle_API.Data;
 namespace WordPuzzle.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230522164802_CreateUserWord")]
+    partial class CreateUserWord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,26 +24,6 @@ namespace WordPuzzle.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WordId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WordId");
-
-                    b.ToTable("Definitions");
-                });
 
             modelBuilder.Entity("Puzzle_API.Model.UserDetail", b =>
                 {
@@ -64,15 +47,9 @@ namespace WordPuzzle.Migrations
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserWords")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("UserDetail");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Puzzle_API.Model.UserSession", b =>
@@ -81,25 +58,18 @@ namespace WordPuzzle.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateTimeEntered")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("UserDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("sessionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserDetailId")
-                        .IsUnique();
+                    b.HasIndex("UserDetailId");
 
-                    b.ToTable("UserSessions");
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Puzzle_API.Model.UserWord", b =>
@@ -119,7 +89,27 @@ namespace WordPuzzle.Migrations
 
                     b.HasIndex("UserDetailId");
 
-                    b.ToTable("UserWord");
+                    b.ToTable("UserWords");
+                });
+
+            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WordId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordId");
+
+                    b.ToTable("Definitions");
                 });
 
             modelBuilder.Entity("Puzzle_API.Model.Word", b =>
@@ -139,22 +129,11 @@ namespace WordPuzzle.Migrations
                     b.ToTable("Words");
                 });
 
-            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
-                {
-                    b.HasOne("Puzzle_API.Model.Word", "Word")
-                        .WithMany("Definitions")
-                        .HasForeignKey("WordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Word");
-                });
-
             modelBuilder.Entity("Puzzle_API.Model.UserSession", b =>
                 {
                     b.HasOne("Puzzle_API.Model.UserDetail", "UserDetail")
-                        .WithOne("UserSession")
-                        .HasForeignKey("Puzzle_API.Model.UserSession", "UserDetailId")
+                        .WithMany()
+                        .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -172,10 +151,15 @@ namespace WordPuzzle.Migrations
                     b.Navigation("UserDetail");
                 });
 
-            modelBuilder.Entity("Puzzle_API.Model.UserDetail", b =>
+            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
                 {
-                    b.Navigation("UserSession")
+                    b.HasOne("Puzzle_API.Model.Word", "Word")
+                        .WithMany("Definitions")
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Word");
                 });
 
             modelBuilder.Entity("Puzzle_API.Model.Word", b =>

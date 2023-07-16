@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Puzzle_API.Data;
 
@@ -11,9 +12,11 @@ using Puzzle_API.Data;
 namespace WordPuzzle.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230606200751_RedoUserSessionTable")]
+    partial class RedoUserSessionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,12 +67,6 @@ namespace WordPuzzle.Migrations
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserWords")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("UserDetail");
@@ -91,13 +88,9 @@ namespace WordPuzzle.Migrations
                     b.Property<Guid>("UserDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserDetailId")
-                        .IsUnique();
+                    b.HasIndex("UserDetailId");
 
                     b.ToTable("UserSessions");
                 });
@@ -153,8 +146,8 @@ namespace WordPuzzle.Migrations
             modelBuilder.Entity("Puzzle_API.Model.UserSession", b =>
                 {
                     b.HasOne("Puzzle_API.Model.UserDetail", "UserDetail")
-                        .WithOne("UserSession")
-                        .HasForeignKey("Puzzle_API.Model.UserSession", "UserDetailId")
+                        .WithMany()
+                        .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -170,12 +163,6 @@ namespace WordPuzzle.Migrations
                         .IsRequired();
 
                     b.Navigation("UserDetail");
-                });
-
-            modelBuilder.Entity("Puzzle_API.Model.UserDetail", b =>
-                {
-                    b.Navigation("UserSession")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Puzzle_API.Model.Word", b =>

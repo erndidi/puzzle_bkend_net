@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Word_Puzzle.Model
+namespace Puzzle_API.Model
 {
     public class APIResponse
     {

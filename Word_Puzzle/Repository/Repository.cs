@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Word_Puzzle.Data;
+using Puzzle_API.Data;
 
-namespace Word_Puzzle.Repository
+namespace Puzzle_API.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

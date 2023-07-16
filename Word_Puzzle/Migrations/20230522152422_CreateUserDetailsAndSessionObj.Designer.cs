@@ -12,8 +12,8 @@ using Puzzle_API.Data;
 namespace WordPuzzle.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230208080617_Intitial")]
-    partial class Intitial
+    [Migration("20230522152422_CreateUserDetailsAndSessionObj")]
+    partial class CreateUserDetailsAndSessionObj
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

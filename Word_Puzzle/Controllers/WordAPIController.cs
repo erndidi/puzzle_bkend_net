@@ -2,38 +2,36 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Word_Puzzle.Data;
-using Word_Puzzle.Logging;
-using Word_Puzzle.Model;
-using Word_Puzzle.Model.DTO;
-using Word_Puzzle.Model.Store;
+using Puzzle_API.Data;
+using Puzzle_API.Logging;
+using Puzzle_API.Model;
+using Puzzle_API.Model.DTO;
+using Puzzle_API.Model.Store;
 
-namespace Word_Puzzle.Controllers
+namespace Puzzle_API.Controllers
 {
-    [Route("api/WordAPI")]
+    [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("PuzzleGame")]
     public class WordAPIController : ControllerBase
     {
-        private readonly ILogging _logger;
+        private readonly ILogger<WordAPIController> _logger;
         private readonly DataContext _dataContext;
-
-        public WordAPIController(ILogging logger, DataContext dataContext)
+      
+        public WordAPIController(ILogger<WordAPIController> logger, DataContext dataContext)
         {
             _logger = logger;
             _dataContext = dataContext;
         }
 
-        [EnableCors("MyAllowSpecificOrigins")]
-        [HttpGet]
-        public async Task<WordDTO> GetWord()
+   
+            [HttpGet("/getword/{word},{sessionid}")]
+        public async Task<ActionResult<WordDTO>> GetWord(string word, string sessionid)
         {
-            WordDTO wordDTO = Word_Puzzle_Store.GetWord(_dataContext);
-
-
+            _logger.LogInformation("Logger is working");
+            WordDTO wordDTO = Word_Store.GetWord(_dataContext,word,sessionid); 
             return wordDTO;
-
         }
-
 
 
     }

@@ -1,4 +1,4 @@
-﻿namespace Word_Puzzle.Repository
+﻿namespace Puzzle_API.Repository
 {
     public interface IRepository<T> where T : class
     {

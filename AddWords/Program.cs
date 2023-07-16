@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using Word_Puzzle.Data;
-using Word_Puzzle.Model;
+using Puzzle_API.Data;
+using Puzzle_API.Model;
 
 
 try

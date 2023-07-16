@@ -1,8 +1,8 @@
-﻿using Word_Puzzle.Data;
-using Word_Puzzle.Model;
-using Word_Puzzle.Repository;
+﻿using Puzzle_API.Data;
+using Puzzle_API.Model;
+using Puzzle_API.Repository;
 
-namespace Word_Puzzle.Repository
+namespace Puzzle_API.Repository
 {
     public class WordRepository : Repository<Word>, IWordRepository
     {

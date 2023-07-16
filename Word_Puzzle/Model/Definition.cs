@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Word_Puzzle.Model
+namespace Puzzle_API.Model
 {
     public class Definition
     {

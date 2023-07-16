@@ -1,6 +1,6 @@
-﻿using Word_Puzzle.Model;
+﻿using Puzzle_API.Model;
 
-namespace Word_Puzzle.Repository
+namespace Puzzle_API.Repository
 {
     public interface IWordRepository : IRepository<Word>
     {

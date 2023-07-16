@@ -1,4 +1,4 @@
-﻿namespace Word_Puzzle.Model.DTO
+﻿namespace Puzzle_API.Model.DTO
 {
     public class WordDTO
     {
@@ -6,7 +6,9 @@
 
         public string Text { get; set; }
 
-        public DefinitionDTO Def { get; set; }  
-        public List<DefinitionDTO> Decoys = new List<DefinitionDTO>();
+        public string? UsedWord { get; set; }
+
+        // public Definition Definitions { get; set; }  
+        public List<DefinitionDTO> Definitions = new List<DefinitionDTO>();
     }
 }

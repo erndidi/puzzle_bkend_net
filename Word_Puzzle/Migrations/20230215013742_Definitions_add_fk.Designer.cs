@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Word_Puzzle.Data;
+using Puzzle_API.Data;
 
 #nullable disable
 
@@ -25,7 +25,7 @@ namespace WordPuzzle.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Word_Puzzle.Model.Definition", b =>
+            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace WordPuzzle.Migrations
                     b.ToTable("Definitions");
                 });
 
-            modelBuilder.Entity("Word_Puzzle.Model.Word", b =>
+            modelBuilder.Entity("Puzzle_API.Model.Word", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,9 +62,9 @@ namespace WordPuzzle.Migrations
                     b.ToTable("Words");
                 });
 
-            modelBuilder.Entity("Word_Puzzle.Model.Definition", b =>
+            modelBuilder.Entity("Puzzle_API.Model.Definition", b =>
                 {
-                    b.HasOne("Word_Puzzle.Model.Word", "Word")
+                    b.HasOne("Puzzle_API.Model.Word", "Word")
                         .WithMany("Definitions")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -73,7 +73,7 @@ namespace WordPuzzle.Migrations
                     b.Navigation("Word");
                 });
 
-            modelBuilder.Entity("Word_Puzzle.Model.Word", b =>
+            modelBuilder.Entity("Puzzle_API.Model.Word", b =>
                 {
                     b.Navigation("Definitions");
                 });

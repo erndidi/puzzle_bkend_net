@@ -1,7 +1,11 @@
-﻿namespace Word_Puzzle
+﻿namespace Puzzle_API
 {
-    public class Utility
+    public static class Utility
     {
-
+        public static int GetWordScore(string word, int seconds)
+        {
+            char[] letters = word.ToCharArray();
+            return letters.Length * seconds;
+        }
     }
 }

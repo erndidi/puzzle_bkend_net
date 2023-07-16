@@ -1,4 +1,4 @@
-﻿namespace Word_Puzzle.Logging
+﻿namespace Puzzle_API.Logging
 {
     public class Logging : ILogging
     {
