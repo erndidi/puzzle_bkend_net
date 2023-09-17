@@ -10,7 +10,7 @@ namespace Puzzle_API.Model
         [ForeignKey("UserId")]
         public UserDetail UserDetail { get; set; }
         public Guid UserDetailId { get; set; } // Foreign key
-
+        [Column("DateEnteredTIme")]
         public DateTime DateTimeEntered { get; set; }
 
     }

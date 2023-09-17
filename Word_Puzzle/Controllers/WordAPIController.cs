@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Puzzle_API.Data;
+using Puzzle_API.Hub;
 using Puzzle_API.Logging;
 using Puzzle_API.Model;
 using Puzzle_API.Model.DTO;
@@ -24,12 +24,11 @@ namespace Puzzle_API.Controllers
             _dataContext = dataContext;
         }
 
-   
-            [HttpGet("/getword/{word},{sessionid}")]
-        public async Task<ActionResult<WordDTO>> GetWord(string word, string sessionid)
+        [HttpGet("/getword/")]
+        public async Task<ActionResult<WordDTO>> GetWord(string sessionid)
         {
             _logger.LogInformation("Logger is working");
-            WordDTO wordDTO = Word_Store.GetWord(_dataContext,word,sessionid); 
+            WordDTO wordDTO = Word_Store.GetWord(_dataContext, sessionid);
             return wordDTO;
         }
 

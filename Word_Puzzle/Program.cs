@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Configuration;
 using Serilog;
 using Serilog.Configuration;
+using Puzzle_API.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowOrigin = "AllowOrigin";
@@ -24,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILogging, Logging>();
-builder.Services.AddDbContext<Puzzle_API.Data.DataContext>();
+builder.Services.AddDbContext<DataContext>();
 builder.Services.AddMvc().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -35,7 +36,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PuzzleGame", builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
+        builder.WithOrigins("http://localhost:3000")
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
@@ -48,6 +49,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddSignalR();
 
 //Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/Puzzle_APIlogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 
@@ -67,5 +69,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseSession();
+//app.UseEndpoints(endpoints =>
+//{
+//   // endpoints.MapHub<ChatHub>("/chathub");
+//    // Other endpoints...
+//});
+
 
 app.Run();

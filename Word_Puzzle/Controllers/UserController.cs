@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Puzzle_API.Model;
 using Puzzle_API.Model.DTO;
 using Puzzle_API.Model.Store;
-using Puzzle_API.Data;
 using Puzzle_API.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using Puzzle_API.Hub;
 
 namespace Puzzle_API.Controllers
 {
@@ -16,88 +17,68 @@ namespace Puzzle_API.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly DataContext _dataContext;
 
-        public UserController(ILogger<UserController> logger, Puzzle_API.Data.DataContext dataContext)
+        public UserController(ILogger<UserController> logger, DataContext dataContext)
         {
             _logger = logger;
             _dataContext = dataContext;
         }
 
-      
-        [HttpPost("/add/{user}")]
-        public async Task<ActionResult<UserDTO>> AddUser(UserDTO user)
+        [HttpGet("/gettopScores")]
+        public List<PlayerDTO> GetAllScores(PlayerDTO user)
         {
+            
+            return PlayerStore.GetTopPlayerScores(_dataContext);
+            ;
+        }
+
+        [HttpPost("/add")]
+      
+        public async Task<ActionResult<PlayerDTO>> Add([FromBody] PlayerDTO user)
+        {
+            PlayerDTO player = new PlayerDTO();
+            string sessionid = string.Empty;
+
             try
             {
-               if(UserStore.IsEmailNotAvailable(_dataContext, user.Email))
+
+                if (PlayerStore.IsEmailNotAvailable(_dataContext, user.Email))
                 {
-                    return Conflict("User email already in use.");
+                    // return Conflict("User email already in use.");
                 }
 
-                UserStore.AddUser(_dataContext, user);
+                if (PlayerStore.IsUserNameNotAvailable(_dataContext, user.UserName))
+                {
+                    // return Conflict("User email already in use.");
+
+                }
+                player = await PlayerStore.AddPlayerAsync(_dataContext, user);
             }
+
+
+
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return StatusCode(500,"There was an error setting up the user.");
+                 return StatusCode(500, "There was an error setting up the user.");
             }
 
 
-            return Ok();
+            return player;
         }
-
-        [HttpPost("/update/{user}")]
-        public async Task<ActionResult<WordDTO>> UpdateUser(UserDTO user)
+        [HttpPost("/login")]
+        public async Task<ActionResult<PlayerDTO>> Login([FromBody] PlayerDTO player)
         {
+            player.UserFound = false; 
             try
             {
-                await UserStore.UpdateUserScore(user, _dataContext);
+                PlayerStore.GetPlayer(_dataContext, ref player);         
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return BadRequest("There was an error setting up the user.");
+                _logger.LogError(ex.Message);                
             }
-
-            return Ok();
+            return player;
         }
-
-        [HttpPost("/updatescore/{user}")]
-        public async Task<ActionResult<UserDTO>> Updatescore(UserDTO user)
-        {
-            try
-            {
-                await UserStore.UpdateUserScore(user, _dataContext);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest("There was an error setting up the user.");
-            }
-
-            if (string.IsNullOrEmpty(user.SessionId))
-            {
-                return BadRequest("Invalid session ID");
-            }
-
-            return user;
-        }
-
-        [HttpPost("/updatesessionid")]
-        public async Task<ActionResult<WordDTO>> UpdateSessionId(UserDTO user)
-        {
-            try
-            {
-                UserStore.UpdateUser(_dataContext, user);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest("There was an error setting up the user.");
-            }
-
-            return Ok();
-        }
-
 
     }
 }

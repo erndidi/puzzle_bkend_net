@@ -6,13 +6,13 @@ using System.Reflection.Emit;
 using System.Reflection.Metadata;
 
 
-namespace Puzzle_API.Data
+namespace Puzzle_API.Hub
 {
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
- 
+
 
         }
 
@@ -27,18 +27,19 @@ namespace Puzzle_API.Data
         }
 
         public DbSet<Word> Words { get; set; }
-       public DbSet<Definition> Definitions { get; set; }
-       
+        public DbSet<Definition> Definitions { get; set; }
+
         public DbSet<UserDetail> UserDetail { get; set; }
 
         public DbSet<UserSession> UserSessions { get; set; }
 
         public DbSet<UserWord> UserWord { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+        public DbSet<Friends> Friends { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Words;Trusted_Connection=True;TrustServerCertificate=true;");
         }
 
-       
+
     }
 }

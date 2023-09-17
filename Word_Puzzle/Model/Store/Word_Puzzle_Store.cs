@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Puzzle_API.Data;
+using Puzzle_API.Hub;
 using Puzzle_API.Model.DTO;
 using Serilog;
 using System.Drawing.Text;
@@ -9,27 +9,27 @@ namespace Puzzle_API.Model.Store
     public static class Word_Store
     {
 
-       public static WordDTO GetWord(DataContext dataContext,string incomingWord,string sessionid)
+       public static WordDTO GetWord(DataContext dataContext,string sessionid)
         {
             Log.Logger = new LoggerConfiguration()
                           .WriteTo.Console()
                           .CreateLogger();
            Word word = null;
+         
             
             WordDTO wordDTO = new WordDTO();
             try
             {
-                if (!incomingWord.Equals("*"))
+                if (sessionid != "empty")
                 {
                     Guid userid = dataContext.UserSessions.Where(us => us.SessionId == sessionid).Select(us => us.UserDetailId).FirstOrDefault();
-                    if (!sessionid.Equals("*"))
-                    {
+                 
                         
                         string usedWord = string.Empty;
                         //the below is a comma delimited string of words used in puzzled that have been solved in the past by the user
                         string wordToParse = dataContext.UserWord.Where(uw => uw.UserDetail.Id == userid).Select(uw => uw.UsedWord).FirstOrDefault();
 
-                        foreach (var wrd in dataContext.Words)
+                       /*  foreach (var wrd in dataContext.Words)
                         {
                             //making sure that a word solved recently doesn't reappear
                             if (!wrd.Text.Contains(wordToParse) && wrd.Text.Contains(incomingWord))
@@ -40,8 +40,9 @@ namespace Puzzle_API.Model.Store
 
                             }
                         }
-                    }
-                    StoreUsedWord(dataContext, userid, incomingWord);
+                        */
+                    
+                  //  StoreUsedWord(dataContext, userid, incomingWord);
                 }
                 else
                 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Puzzle_API.Data;
+using Puzzle_API.Hub;
 
 namespace Puzzle_API.Repository
 {
